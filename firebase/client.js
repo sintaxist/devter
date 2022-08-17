@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat/app'
-import {  GithubAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import {  GithubAuthProvider, signInWithPopup, getAuth, getAdditionalUserInfo, onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD7sr300bp3tYJL3sr6exwnQEd8HAegQHQ",
@@ -15,15 +15,33 @@ firebase.initializeApp(firebaseConfig);
 
 const provider = new GithubAuthProvider();
 
+export const listenAuthStateChanged = (onChange) => {
+    const auth = getAuth();
+    return onAuthStateChanged(auth, (user) => {
+        if(user){
+            console.log('login')
+        }
+    })
+}
 
 export const loginWithGitHub = () => {
     const auth = getAuth();
-    signInWithPopup(auth, provider)
+    return signInWithPopup(auth, provider)
     .then((result) => {
         const credential = GithubAuthProvider.credentialFromResult(result);
+        const details = getAdditionalUserInfo(result)
         const token = credential.accessToken;
-
         const user = result.user;
+
+        const {username, profile} = details
+        const {avatar_url, blog} = profile
+
+        return{
+            avatar: avatar_url,
+            username,
+            url: blog
+        }
+
     }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;

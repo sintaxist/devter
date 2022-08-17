@@ -5,18 +5,23 @@ import { colors } from '../styles/theme'
 import Button from '../components/Button'
 import GitHub from '../components/Icons/github'
 
-import {loginWithGitHub} from '../firebase/client'
+import { loginWithGitHub } from '../firebase/client'
+import { useState } from 'react'
 
 export default function Home() {
 
+  const [user, setUser] = useState(null)
+
   const handleClick = () => {
-    loginWithGitHub();
-    // loginWithGitHub().then(user => {
-    //   console.log(user)
-    // }).catch(err => {
-    //   console.log(err)
-    // })
+    loginWithGitHub()
+      .then((result) => {
+        const { avatar, username, url } = result
+        setUser(result)
+      }).catch(err => {
+        console.log(err)
+      })
   }
+
   return (
     <>
       <Head>
@@ -31,10 +36,9 @@ export default function Home() {
           <h1 className={styles.title}>Devter</h1>
           <h2>Talk about development<br />with developers 👨🏻‍💻 👩🏻‍💻</h2>
           <div>
-            <Button onClick={handleClick}>
-              <GitHub/>
-              Login with Github
-            </Button>
+            {
+              user === null && <Button onClick={handleClick}><GitHub />Login with Github</Button>
+            }
           </div>
         </section>
       </AppLayout>
