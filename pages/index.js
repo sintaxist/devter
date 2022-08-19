@@ -5,19 +5,21 @@ import { colors } from '../styles/theme'
 import Button from '../components/Button'
 import GitHub from '../components/Icons/github'
 
-import { loginWithGitHub } from '../firebase/client'
-import { useState } from 'react'
+import { listenAuthStateChanged, loginWithGitHub } from '../firebase/client'
+import { useEffect, useState } from 'react'
+import Avatar from '../components/Avatar / index'
 
 export default function Home() {
-
   const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    listenAuthStateChanged(setUser)
+  }, [])
 
   const handleClick = () => {
     loginWithGitHub()
-      .then((result) => {
-        const { avatar, username, url } = result
-        setUser(result)
-      }).catch(err => {
+      .then(setUser)
+      .catch((err) => {
         console.log(err)
       })
   }
@@ -32,41 +34,53 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <img src='/logo.svg' alt='Logo' />
+          <img src="/logo.svg" alt="Logo" />
           <h1 className={styles.title}>Devter</h1>
-          <h2>Talk about development<br />with developers 👨🏻‍💻 👩🏻‍💻</h2>
+          <h2>
+            Talk about development
+            <br />
+            with developers 👨🏻‍💻 👩🏻‍💻
+          </h2>
           <div>
-            {
-              user === null && <Button onClick={handleClick}><GitHub />Login with Github</Button>
-            }
+            {user === null && (
+              <Button onClick={handleClick}>
+                <GitHub />
+                Login with GitHub
+              </Button>
+            )}
+            {user && user.avatar && (
+              <div>
+                <Avatar alt={user.username} title={user.username} src={user.avatar} text={user.username} withText />
+              </div>
+            )}
           </div>
         </section>
       </AppLayout>
 
       <style jsx>{`
-        img{
+        img {
           width: 120px;
         }
 
-        section{
+        section {
           display: grid;
           height: 100%;
           place-content: center;
           place-items: center;
         }
 
-        div{
+        div {
           margin-top: 16px;
         }
 
-        h1{
+        h1 {
           color: ${colors.black};
           font-weight: 800;
           margin-bottom: 16px;
           text-align: center;
         }
 
-        h2{
+        h2 {
           color: ${colors.secondary};
           font-size: 21px;
           margin: 0;

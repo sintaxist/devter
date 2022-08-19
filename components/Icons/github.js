@@ -1,5 +1,5 @@
-import * as React from "react"
-import { colors } from "../../styles/theme"
+import * as React from 'react'
+import { colors } from '../../styles/theme'
 
 const GitHub = (props) => (
   <svg

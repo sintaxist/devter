@@ -6,17 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint2": "eslint . --fix"
   },
   "dependencies": {
     "firebase": "^9.9.2",
     "next": "12.2.5",
+    "node-sass": "^7.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "eslint": "8.21.0",
-    "eslint-config-next": "12.2.5",
     "sass": "^1.54.4"
   }
 }
