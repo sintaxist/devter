@@ -1,20 +1,28 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.scss'
-import AppLayout from '../components/AppLayout'
-import { colors } from '../styles/theme'
-import Button from '../components/Button'
-import GitHub from '../components/Icons/github'
-
-import { listenAuthStateChanged, loginWithGitHub } from '../firebase/client'
 import { useEffect, useState } from 'react'
-import Avatar from '../components/Avatar / index'
+import Head from 'next/head'
+
+import AppLayout from 'components/AppLayout'
+import Button from 'components/Button'
+import GitHub from 'components/Icons/github'
+import Logo from 'components/Icons/logo'
+
+import styles from 'styles/Home.module.scss'
+import { colors } from 'styles/theme'
+
+import { listenAuthStateChanged, loginWithGitHub } from 'firebaseSesion/client'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter()
   const [user, setUser] = useState(null)
 
   useEffect(() => {
     listenAuthStateChanged(setUser)
   }, [])
+
+  useEffect(() => {
+    user && router.replace("/home")
+  }, [user])
 
   const handleClick = () => {
     loginWithGitHub()
@@ -34,7 +42,7 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <img src="/logo.svg" alt="Logo" />
+          <Logo width='100' />
           <h1 className={styles.title}>Devter</h1>
           <h2>
             Talk about development
@@ -42,17 +50,12 @@ export default function Home() {
             with developers 👨🏻‍💻 👩🏻‍💻
           </h2>
           <div>
-            {user === null && (
+            {user === null ? (
               <Button onClick={handleClick}>
                 <GitHub />
                 Login with GitHub
               </Button>
-            )}
-            {user && user.avatar && (
-              <div>
-                <Avatar alt={user.username} title={user.username} src={user.avatar} text={user.username} withText />
-              </div>
-            )}
+            ) : <span>Loading...</span>}
           </div>
         </section>
       </AppLayout>
@@ -74,8 +77,9 @@ export default function Home() {
         }
 
         h1 {
-          color: ${colors.black};
+          color: ${colors.primary};
           font-weight: 800;
+          font-size: 32px;
           margin-bottom: 16px;
           text-align: center;
         }
@@ -84,6 +88,10 @@ export default function Home() {
           color: ${colors.secondary};
           font-size: 21px;
           margin: 0;
+        }
+        span{
+          font-weight: bold;
+          color: ${colors.primary};
         }
       `}</style>
     </>

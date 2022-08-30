@@ -34,7 +34,7 @@ export const listenAuthStateChanged = (onChange) => {
   const auth = getAuth()
   return onAuthStateChanged(auth, (user) => {
     if (user) {
-      const normalizeUser = mapUserFromFirebaseAuthToUser(user)
+      const normalizeUser = user ? mapUserFromFirebaseAuthToUser(user) : null
       onChange(normalizeUser)
     }
   })

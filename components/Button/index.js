@@ -1,4 +1,4 @@
-import { colors } from '../../styles/theme'
+import { colors } from 'styles/theme'
 
 export default function Button({ children, onClick }) {
     return (
@@ -13,7 +13,7 @@ export default function Button({ children, onClick }) {
                   align-items: center;
                   gap: 10px;
                   border: 0;
-                  background: ${colors.primary};
+                  background: ${colors.black};
                   color: ${colors.white};
                   border-radius: 100px;
                   font-size: 16px;
