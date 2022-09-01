@@ -1,5 +1,6 @@
 import AppLayout from "components/AppLayout";
 import Devit from "components/devit";
+import { fetchLatestDevits } from "firebaseSesion/client";
 import useUser from "hooks/useUser";
 import { useEffect, useState } from "react";
 
@@ -9,9 +10,8 @@ export default function HomePage() {
     const user = useUser()
 
     useEffect(() => {
-        user && fetch('http://localhost:3000/api/statuses/home_timeline')
-            .then(res => res.json())
-            .then(setTimeline)
+        user &&
+            fetchLatestDevits().then(setTimeline)
     }, [user])
 
     // console.log(user)
@@ -25,12 +25,15 @@ export default function HomePage() {
                 </header>
 
                 <section>
-                    {timeline.map(({ id, username, avatar, message }) => (
+                    {timeline.map(({ id, userName, avatar, content, createdAt, userId }) => (
                         <Devit
                             key={id}
-                            username={username}
+                            id={id}
+                            createdAt={createdAt}
+                            userName={userName}
                             avatar={avatar}
-                            message={message}
+                            content={content}
+                            userId={userId}
                         />
                     )
                     )}

@@ -1,9 +1,9 @@
 import { colors } from 'styles/theme'
 
-export default function Button({ children, onClick }) {
+export default function Button({ children, onClick, disabled }) {
     return (
         <>
-            <button onClick={onClick}>
+            <button onClick={onClick} disabled={disabled}>
                 {children}
             </button>
 
@@ -21,12 +21,17 @@ export default function Button({ children, onClick }) {
                   padding: 13px 24px;
                   font-weight: 800;
                   transition: opacity .3s ease;
+                  user-select: none;
                 }
                 button > :global(svg){
                     transform: scale(1.2);
                 }
                 button:hover{
                     opacity: .7;
+                }
+                button[disabled]{
+                    pointer-events: none;
+                    opacity: .2;
                 }
             `}</style>
         </>

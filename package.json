@@ -10,7 +10,7 @@
     "lint2": "eslint . --fix"
   },
   "dependencies": {
-    "firebase": "^9.9.2",
+    "firebase": "^8.10.0",
     "next": "12.2.5",
     "node-sass": "^7.0.1",
     "react": "18.2.0",

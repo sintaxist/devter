@@ -1,10 +1,7 @@
-import firebase from 'firebase/compat/app'
-import {
-  GithubAuthProvider,
-  signInWithPopup,
-  getAuth,
-  onAuthStateChanged
-} from 'firebase/auth'
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD7sr300bp3tYJL3sr6exwnQEd8HAegQHQ',
@@ -18,61 +15,64 @@ const firebaseConfig = {
 
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
 
+const db = firebase.firestore()
+
 const mapUserFromFirebaseAuthToUser = (user) => {
-  const credential = GithubAuthProvider.credentialFromResult(user)
-  // const token = credential.accessToken
-  const { displayName, email, photoURL } = user
+  const { displayName, email, photoURL, uid } = user
 
   return {
     avatar: photoURL,
     username: displayName,
-    email
+    email,
+    uid,
   }
 }
 
 export const listenAuthStateChanged = (onChange) => {
-  const auth = getAuth()
-  return onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const normalizeUser = user ? mapUserFromFirebaseAuthToUser(user) : null
-      onChange(normalizeUser)
-    } else {
-      return null
-    }
+  return firebase.auth().onAuthStateChanged((user) => {
+    const normalizedUser = user ? mapUserFromFirebaseAuthToUser(user) : null
+
+    onChange(normalizedUser)
   })
 }
 
 export const loginWithGitHub = () => {
-  const provider = new GithubAuthProvider()
-  const auth = getAuth()
-  return signInWithPopup(auth, provider)
+  const githubProvider = new firebase.auth.GithubAuthProvider()
+  return firebase.auth().signInWithPopup(githubProvider)
 }
 
-// Get Additional info from the user
+export const addDevit = ({ avatar, content, userId, userName }) => {
+  return db.collection("devits").add({
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0,
+  })
+}
 
-/*
-export const loginWithGitHub = () => {
-const auth = getAuth();
-return signInWithPopup(auth, provider)
-.then((result) => {
-    const credential = GithubAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    const user = result.user;
-    const details = getAdditionalUserInfo(result)
+export const fetchLatestDevits = () => {
+  return db
+    .collection("devits")
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        const id = doc.id
+        const { createdAt } = data
 
-    const {username, profile} = details
-    const {avatar_url, blog} = profile
+        const date = new Date(createdAt.seconds * 1000)
+        const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(
+          date
+        )
 
-    return{
-        avatar: avatar_url,
-        username,
-        url: blog
-    }
-
-}).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const email = error.email;
-    const credential = GithubAuthProvider.credentialFromError(error);
-});
-} */
+        return {
+          ...data,
+          id,
+          createdAt: normalizedCreatedAt,
+        }
+      })
+    })
+}

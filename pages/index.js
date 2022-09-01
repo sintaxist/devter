@@ -47,10 +47,6 @@ export default function Home() {
             with developers 👨🏻‍💻 👩🏻‍💻
           </h2>
           <div>
-            {/* <Button onClick={handleClick}>
-              <GitHub width={24} height={24} />
-              Login with GitHub
-            </Button> */}
             {user === USER_STATES.NOT_LOGGED && (
               <Button onClick={handleClick}>
                 <GitHub width={24} height={24} />

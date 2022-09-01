@@ -13,7 +13,6 @@ export default function useUser() {
 
     useEffect(() => {
         listenAuthStateChanged(setUser)
-        console.log(user)
     }, [])
 
     useEffect(() => {
