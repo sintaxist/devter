@@ -125,6 +125,7 @@ export default function ComposeTweet() {
             </AppLayout>
             <style jsx>{`
                 form{
+                    width: 100%;
                     padding: 10px;
                 }
                 .remove-img{
@@ -147,6 +148,7 @@ export default function ComposeTweet() {
                     opacity: .3;
                 }
                 .form-container{
+                    width: 100%;
                     display: flex;
                     align-items: flex-start;
                 }
