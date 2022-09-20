@@ -24,49 +24,47 @@ export default function HomePage() {
 
     return (
         <>
-            <AppLayout>
-                <Head>
-                    <title>Inicio | Devter</title>
-                </Head>
-                <header>
-                    <h2>Inicio</h2>
-                </header>
+            <Head>
+                <title>Inicio | Devter</title>
+            </Head>
+            <header>
+                <h2>Inicio</h2>
+            </header>
 
-                <section>
-                    {timeline.map(({ id, userName, avatar, content, createdAt, userId, img }) => (
-                        <Devit
-                            key={id}
-                            id={id}
-                            img={img}
-                            createdAt={createdAt}
-                            userName={userName}
-                            avatar={avatar}
-                            content={content}
-                            userId={userId}
-                        />
-                    )
-                    )}
-                </section>
+            <section>
+                {timeline.map(({ id, userName, avatar, content, createdAt, userId, img }) => (
+                    <Devit
+                        key={id}
+                        id={id}
+                        img={img}
+                        createdAt={createdAt}
+                        userName={userName}
+                        avatar={avatar}
+                        content={content}
+                        userId={userId}
+                    />
+                )
+                )}
+            </section>
 
-                <nav>
-                    <Link href="/compose/tweet">
-                        <a>
-                            <Home width={32} height={32} stroke='#09f' />
-                        </a>
-                    </Link>
-                    <Link href="/compose/tweet">
-                        <a>
-                            <Search width={32} height={32} stroke='#09f' />
-                        </a>
-                    </Link>
-                    <Link href="/compose/tweet">
-                        <a>
-                            <Create width={32} height={32} stroke='#09f' />
-                        </a>
-                    </Link>
-                </nav>
+            <nav>
+                <Link href="/compose/tweet">
+                    <a>
+                        <Home width={32} height={32} stroke='#09f' />
+                    </a>
+                </Link>
+                <Link href="/compose/tweet">
+                    <a>
+                        <Search width={32} height={32} stroke='#09f' />
+                    </a>
+                </Link>
+                <Link href="/compose/tweet">
+                    <a>
+                        <Create width={32} height={32} stroke='#09f' />
+                    </a>
+                </Link>
+            </nav>
 
-            </AppLayout>
 
             <style jsx>{`
                 header{
